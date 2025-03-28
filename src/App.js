@@ -62,7 +62,7 @@ const App = () => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900">
+    <div className="flex fixed inset-0 h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
       {/* Sidebar */}
       <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
       
@@ -76,7 +76,7 @@ const App = () => {
       )}
 
       {/* Main Content */}
-      <div className="flex flex-col flex-1 w-0 overflow-hidden">
+      <div className="flex flex-col flex-1 w-0">
         <Navbar 
           sidebarOpen={sidebarOpen} 
           setSidebarOpen={setSidebarOpen} 
@@ -85,8 +85,8 @@ const App = () => {
         />
         
         {/* Main Content Area */}
-        <main className="relative flex-1 overflow-y-auto focus:outline-none">
-          <div className="py-3 px-3 sm:px-4 lg:px-6 mx-auto">
+        <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 focus:outline-none">
+          <div className="h-full py-2 px-2 sm:px-3 lg:px-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/projects" element={<Projects />} />
@@ -99,9 +99,9 @@ const App = () => {
         </main>
 
         {/* Status bar at bottom - desktop OS-like feature */}
-        <footer className="h-5 bg-gray-100 dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 flex items-center px-3 text-xs text-gray-500 dark:text-gray-400">
+        <footer className="flex-shrink-0 h-5 bg-gray-100 dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 flex items-center px-3 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center">
-            <span className="w-2 h-2 rounded-full bg-green-500 mr-1"></span>
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
             <span>Connected</span>
           </div>
           <div className="ml-auto flex space-x-3">
