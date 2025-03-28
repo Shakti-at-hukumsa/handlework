@@ -1,10 +1,5 @@
 const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
-import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App';
-import { AppProvider } from './contexts/AppContext';
-import './index.css';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling
 if (require('electron-squirrel-startup')) {
@@ -79,14 +74,3 @@ ipcMain.handle('app:getVersion', () => {
 });
 
 // Add more IPC handlers here as needed
-
-const container = document.getElementById('root');
-const root = createRoot(container);
-
-root.render(
-  <BrowserRouter>
-    <AppProvider>
-      <App />
-    </AppProvider>
-  </BrowserRouter>
-);

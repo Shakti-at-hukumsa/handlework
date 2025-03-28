@@ -1,7 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter as Router } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
+import { AppProvider } from './contexts/AppContext';
 // Import tailwind.css first, then index.css
 import './tailwind.css';
 import './index.css';
@@ -22,9 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Render the app
 root.render(
-  <React.StrictMode>
-    <Router>
+  <BrowserRouter>
+    <AppProvider>
       <App />
-    </Router>
-  </React.StrictMode>
+    </AppProvider>
+  </BrowserRouter>
 ); 
