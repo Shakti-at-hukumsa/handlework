@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useAppSettings } from './contexts/AppContext';
 
 // Layout components
 import Sidebar from './components/Sidebar';
@@ -14,16 +15,12 @@ import Payments from './pages/Payments';
 import Settings from './pages/Settings';
 
 const App = () => {
+  const { settings, toggleTheme } = useAppSettings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
-  // Set initial dark mode on component mount
+  // Handle resize events
   useEffect(() => {
-    // Apply dark mode by default
-    document.documentElement.classList.add('dark');
-    
-    // Handle resize events to detect mobile/desktop
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
       // Auto-close sidebar on mobile when resizing
@@ -43,16 +40,6 @@ const App = () => {
     // Clean up
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  // Toggle theme
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    if (darkMode) {
-      document.documentElement.classList.remove('dark');
-    } else {
-      document.documentElement.classList.add('dark');
-    }
-  };
 
   // Handle sidebar backdrop click (close sidebar)
   const handleBackdropClick = () => {
@@ -80,7 +67,7 @@ const App = () => {
         <Navbar 
           sidebarOpen={sidebarOpen} 
           setSidebarOpen={setSidebarOpen} 
-          darkMode={darkMode}
+          darkMode={settings.theme === 'dark'}
           toggleTheme={toggleTheme}
         />
         

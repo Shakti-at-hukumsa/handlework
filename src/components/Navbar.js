@@ -7,9 +7,11 @@ import {
   Bars3Icon,
   XMarkIcon
 } from '@heroicons/react/24/outline';
+import { useAppSettings } from '../contexts/AppContext';
 
 const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const { settings } = useAppSettings();
 
   return (
     <header className="flex-shrink-0 h-8 bg-gray-200 dark:bg-gray-700 border-b border-gray-300 dark:border-gray-600 z-20 flex items-center">
@@ -22,11 +24,11 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
             onClick={() => setSidebarOpen(true)}
             aria-label="Open sidebar"
           >
-            <Bars3Icon className="h-3 w-3" aria-hidden="true" />
+            <Bars3Icon className="icon-app-sm" aria-hidden="true" />
           </button>
           
           {/* Application menu - Windows-like */}
-          <div className="hidden md:flex space-x-1 ml-1 text-xs">
+          <div className="hidden md:flex space-x-1 ml-1 text-app-xs">
             <button className="px-2 py-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 rounded">File</button>
             <button className="px-2 py-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 rounded">Edit</button>
             <button className="px-2 py-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 rounded">View</button>
@@ -44,7 +46,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
                 onClick={() => setSearchOpen(false)}
                 aria-label="Close search"
               >
-                <XMarkIcon className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+                <XMarkIcon className="icon-app-sm" aria-hidden="true" />
               </button>
             )}
             
@@ -52,11 +54,11 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
               <label htmlFor="search" className="sr-only">Search</label>
               <div className="relative text-gray-400 dark:text-gray-500">
                 <div className="pointer-events-none absolute inset-y-0 left-0 pl-1 flex items-center">
-                  <MagnifyingGlassIcon className="h-2.5 w-2.5" aria-hidden="true" />
+                  <MagnifyingGlassIcon className="icon-app-xs" aria-hidden="true" />
                 </div>
                 <input
                   id="search"
-                  className="block w-full bg-white dark:bg-gray-600 py-0.5 pl-6 pr-1 border border-gray-300 dark:border-gray-500 rounded text-[10px] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                  className="block w-full bg-white dark:bg-gray-600 py-0.5 pl-6 pr-1 border border-gray-300 dark:border-gray-500 rounded text-app-xs text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                   placeholder="Search..."
                   type="search"
                 />
@@ -71,7 +73,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
               onClick={() => setSearchOpen(true)}
               aria-label="Open search"
             >
-              <MagnifyingGlassIcon className="h-3 w-3" aria-hidden="true" />
+              <MagnifyingGlassIcon className="icon-app-sm" aria-hidden="true" />
             </button>
           )}
 
@@ -82,9 +84,9 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
             aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
           >
             {darkMode ? (
-              <SunIcon className="h-3 w-3" aria-hidden="true" />
+              <SunIcon className="icon-app-sm" aria-hidden="true" />
             ) : (
-              <MoonIcon className="h-3 w-3" aria-hidden="true" />
+              <MoonIcon className="icon-app-sm" aria-hidden="true" />
             )}
           </button>
 
@@ -93,7 +95,7 @@ const Navbar = ({ sidebarOpen, setSidebarOpen, darkMode, toggleTheme }) => {
             className="p-1 text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600 rounded relative"
             aria-label="View notifications"
           >
-            <BellIcon className="h-3 w-3" aria-hidden="true" />
+            <BellIcon className="icon-app-sm" aria-hidden="true" />
             {/* Notification dot/badge */}
             <span className="absolute top-0.5 right-0.5 block h-1 w-1 rounded-full bg-red-500"></span>
           </button>
