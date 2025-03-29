@@ -1,27 +1,30 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
+const path = require('path');
 
 module.exports = {
   packagerConfig: {
     asar: true,
+    // Remove unnecessary files
+    ignore: [
+      /^\/\.git/,
+      /^\/\.vscode/,
+      /^\/node_modules\/\.cache/,
+      /^\/src\/(?!assets|components|contexts|pages|utils|App\.js|index\.js|preload\.js|renderer\.js|tailwind\.css|index\.css|index\.html).+/,
+      /\.map$/,
+      /^\/\.\w+/
+    ],
+    // Optimize for production
+    executableName: 'devspace',
+    // Make sure icon is correctly referenced
+    icon: path.resolve(__dirname, 'src/assets/icon'),
   },
   rebuildConfig: {},
   makers: [
-    {
-      name: '@electron-forge/maker-squirrel',
-      config: {},
-    },
+    // Use only ZIP maker for Windows
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
-    },
-    {
-      name: '@electron-forge/maker-deb',
-      config: {},
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
+      platforms: ['win32'],
     },
   ],
   plugins: [
@@ -41,4 +44,11 @@ module.exports = {
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
   ],
+  // Add hooks for further optimization
+  hooks: {
+    packageAfterCopy: async (config, buildPath, electronVersion, platform, arch) => {
+      // You can add custom cleanup operations here
+      console.log('Removing unnecessary files for smaller package size...');
+    }
+  }
 };

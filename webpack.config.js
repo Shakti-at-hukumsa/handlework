@@ -1,50 +1,54 @@
 const path = require('path');
 
 module.exports = {
-  mode: 'development',
+  mode: 'production',
+  devtool: process.env.NODE_ENV === 'development' ? 'source-map' : false,
   entry: './src/renderer.js',
   output: {
-    path: path.resolve(__dirname, 'src'),
     filename: 'renderer.bundle.js',
+    path: path.resolve(__dirname, 'src'),
+  },
+  optimization: {
+    minimize: true,
+    sideEffects: true,
+    usedExports: true,
   },
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
+        test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/preset-react'],
-          },
-        },
+            presets: [
+              '@babel/preset-env',
+              '@babel/preset-react'
+            ],
+            cacheDirectory: true,
+          }
+        }
       },
       {
         test: /\.css$/,
         use: [
           'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-            },
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  'tailwindcss',
-                  'autoprefixer',
-                ],
-              },
-            },
-          },
-        ],
+          'css-loader',
+          'postcss-loader'
+        ]
       },
-    ],
+      {
+        test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/[hash][ext][query]'
+        }
+      }
+    ]
   },
-  resolve: {
-    extensions: ['.js', '.jsx'],
-  },
+  performance: {
+    hints: 'warning',
+    maxAssetSize: 1024 * 1024,
+    maxEntrypointSize: 2 * 1024 * 1024
+  }
 }; 

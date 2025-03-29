@@ -23,6 +23,8 @@ const createWindow = () => {
     icon: path.join(__dirname, 'assets', 'icon.png'),
     show: false,
     backgroundColor: '#1F2937', // Dark theme background
+    // Use default window frame to have native window controls
+    frame: true,
   });
 
   // and load the index.html of the app.
