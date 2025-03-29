@@ -1,15 +1,25 @@
-/* Tailwind directives */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Custom styles */
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
-  margin: auto;
-  max-width: auto;
+  margin: 0;
   padding: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Theme base styles */
+:root {
+  color-scheme: light;
+  background-color: #F9FAFB;
+  color: #1F2937;
+}
+
+:root.dark {
+  color-scheme: dark;
+  background-color: #1F2937;
+  color: #F9FAFB;
 }
 
 /* Font size variables - controlled by dataset attributes on html element */
@@ -145,62 +155,81 @@ body {
   background-color: #374151;
 }
 
-:root.dark body {
+/* Fix for primary colors */
+.bg-primary-600 {
+  background-color: #2563EB;
+}
+
+.text-primary-600 {
+  color: #2563EB;
+}
+
+.dark .text-primary-400 {
+  color: #60A5FA;
+}
+
+/* Fix for dark theme classes */
+.dark\:bg-dark-800 {
   background-color: #1F2937;
-  color: #F9FAFB;
+}
+
+.dark\:border-dark-800 {
+  border-color: #1F2937;
+}
+
+.dark\:text-dark-800 {
+  color: #1F2937;
 }
 
 /* Custom scrollbar styles for Windows-like appearance */
-@layer utilities {
-  .scrollbar-thin {
-    scrollbar-width: thin;
-  }
-  
-  .scrollbar-none {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-  
-  .scrollbar-none::-webkit-scrollbar {
-    display: none;
-  }
-  
-  /* Windows-style scrollbars */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: #c1c1c1;
-    border-radius: 4px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #a0a0a0;
-  }
-  
-  .dark ::-webkit-scrollbar-thumb {
-    background-color: #4b5563;
-  }
-  
-  .dark ::-webkit-scrollbar-thumb:hover {
-    background-color: #6b7280;
-  }
-  
-  /* For Firefox */
-  * {
-    scrollbar-color: #c1c1c1 transparent;
-    scrollbar-width: thin;
-  }
-  
-  .dark * {
-    scrollbar-color: #4b5563 transparent;
-  }
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Windows-style scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a0a0a0;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: #4b5563;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #6b7280;
+}
+
+/* For Firefox */
+* {
+  scrollbar-color: #c1c1c1 transparent;
+  scrollbar-width: thin;
+}
+
+.dark * {
+  scrollbar-color: #4b5563 transparent;
 }
 
 /* Prevent text selection for Windows-like UI feel */
@@ -214,4 +243,12 @@ body {
 /* Windows-like focus style */
 :focus-visible {
   outline: 1px solid #0078d7;
+}
+
+/* Make sure layout doesn't break */
+#root {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  overflow: hidden;
 }

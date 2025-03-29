@@ -86,7 +86,7 @@ const App = () => {
         </main>
 
         {/* Status bar at bottom - desktop OS-like feature */}
-        <footer className="flex-shrink-0 h-5 bg-gray-100 dark:bg-dark-800 border-t border-gray-200 dark:border-dark-700 flex items-center px-3 text-xs text-gray-500 dark:text-gray-400">
+        <footer className="flex-shrink-0 h-5 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center px-3 text-xs text-gray-500 dark:text-gray-400">
           <div className="flex items-center">
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
             <span>Connected</span>
