@@ -28,6 +28,12 @@ export const DataProvider = ({ children }) => {
   // Initialize state from localStorage if available
   const [data, setData] = useState(() => {
     try {
+      // Check if localStorage is available
+      if (typeof window === 'undefined' || !window.localStorage) {
+        console.warn("localStorage is not available in this environment");
+        return initialState;
+      }
+      
       const savedData = localStorage.getItem('app-data');
       // Check if data is compressed (starts with eyJ is the beginning of base64-encoded JSON)
       let parsedData;
@@ -59,8 +65,13 @@ export const DataProvider = ({ children }) => {
   // Data compression setting
   const [useCompression, setUseCompression] = useState(() => {
     try {
+      // Check if localStorage is available
+      if (typeof window === 'undefined' || !window.localStorage) {
+        return false;
+      }
       return localStorage.getItem('use-compression') === 'true';
     } catch (error) {
+      console.error("Error accessing localStorage for compression setting:", error);
       return false;
     }
   });
@@ -68,6 +79,12 @@ export const DataProvider = ({ children }) => {
   // Save data to localStorage whenever it changes
   useEffect(() => {
     try {
+      // Check if localStorage is available
+      if (typeof window === 'undefined' || !window.localStorage) {
+        console.warn("Cannot save data - localStorage is not available");
+        return;
+      }
+      
       // Update metadata
       const updatedData = {
         ...data,
@@ -95,6 +112,11 @@ export const DataProvider = ({ children }) => {
   // Save compression setting
   useEffect(() => {
     try {
+      // Check if localStorage is available
+      if (typeof window === 'undefined' || !window.localStorage) {
+        console.warn("Cannot save compression setting - localStorage is not available");
+        return;
+      }
       localStorage.setItem('use-compression', useCompression.toString());
     } catch (error) {
       console.error("Error saving compression setting:", error);

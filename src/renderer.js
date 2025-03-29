@@ -11,6 +11,14 @@ import './index.css';
 // Set up appearance settings from localStorage before rendering
 const setupAppearanceSettings = () => {
   try {
+    // Check if localStorage is available
+    if (typeof window === 'undefined' || !window.localStorage) {
+      console.warn("localStorage is not available, using default appearance settings");
+      document.documentElement.setAttribute('data-font-size', 'normal');
+      document.documentElement.setAttribute('data-icon-size', 'normal');
+      return;
+    }
+    
     // Get user preferences from localStorage
     const userPreferences = JSON.parse(localStorage.getItem('user-preferences')) || {};
     

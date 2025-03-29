@@ -51,11 +51,37 @@ const defaultPreferences = {
 };
 
 /**
+ * Check if localStorage is available
+ * @returns {boolean} True if localStorage is available
+ */
+const isLocalStorageAvailable = () => {
+  try {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return false;
+    }
+    
+    // Test if we can actually use localStorage
+    const test = '__storage_test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+/**
  * Load user preferences from localStorage
  * @returns {Object} User preferences
  */
 export const loadPreferences = () => {
   try {
+    // Check if localStorage is available
+    if (!isLocalStorageAvailable()) {
+      console.warn('localStorage is not available, using default preferences');
+      return defaultPreferences;
+    }
+    
     const savedPreferences = localStorage.getItem('user-preferences');
     if (savedPreferences) {
       // Merge saved preferences with default values (for any new preferences added)
@@ -75,6 +101,12 @@ export const loadPreferences = () => {
  */
 export const savePreferences = (preferences) => {
   try {
+    // Check if localStorage is available
+    if (!isLocalStorageAvailable()) {
+      console.warn('localStorage is not available, preferences will not persist');
+      return false;
+    }
+    
     localStorage.setItem('user-preferences', JSON.stringify(preferences));
     return true;
   } catch (error) {
