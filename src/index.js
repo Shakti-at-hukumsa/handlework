@@ -74,3 +74,15 @@ ipcMain.handle('app:getVersion', () => {
 });
 
 // Add more IPC handlers here as needed
+
+// Set initial data attributes for font and icon sizes
+const userPreferences = JSON.parse(localStorage.getItem('user-preferences')) || {};
+document.documentElement.setAttribute('data-font-size', userPreferences.fontSize || 'normal');
+document.documentElement.setAttribute('data-icon-size', userPreferences.iconSize || 'normal');
+
+// Apply dark mode initially if needed
+if (userPreferences.theme === 'dark') {
+  document.documentElement.classList.add('dark');
+} else {
+  document.documentElement.classList.remove('dark');
+}

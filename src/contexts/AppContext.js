@@ -59,6 +59,9 @@ export const AppProvider = ({ children }) => {
 
   // Apply font size through CSS variables when it changes
   useEffect(() => {
+    // Set data attribute for CSS selectors
+    document.documentElement.setAttribute('data-font-size', settings.fontSize);
+    
     const fontSizeMap = {
       small: {
         xs: '0.7rem',
@@ -99,6 +102,9 @@ export const AppProvider = ({ children }) => {
 
   // Apply icon size through CSS variables when it changes
   useEffect(() => {
+    // Set data attribute for CSS selectors
+    document.documentElement.setAttribute('data-icon-size', settings.iconSize);
+    
     const iconSizeMap = {
       small: {
         xs: '0.75rem',

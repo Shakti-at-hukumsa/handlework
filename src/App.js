@@ -18,6 +18,7 @@ const App = () => {
   const { settings, toggleTheme } = useAppSettings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isMaximized, setIsMaximized] = useState(true);
 
   // Handle resize events
   useEffect(() => {
@@ -48,32 +49,74 @@ const App = () => {
     }
   };
 
-  return (
-    <div className="flex fixed inset-0 h-screen bg-gray-50 dark:bg-gray-900 overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
-      
-      {/* Backdrop for mobile sidebar */}
-      {sidebarOpen && isMobile && (
-        <div 
-          className="fixed inset-0 z-10 bg-gray-900 bg-opacity-50 transition-opacity lg:hidden"
-          onClick={handleBackdropClick}
-          aria-hidden="true"
-        />
-      )}
+  // Toggle maximized state
+  const toggleMaximized = () => {
+    setIsMaximized(!isMaximized);
+  };
 
-      {/* Main Content */}
-      <div className="flex flex-col flex-1 w-0">
-        <Navbar 
-          sidebarOpen={sidebarOpen} 
-          setSidebarOpen={setSidebarOpen} 
-          darkMode={settings.theme === 'dark'}
-          toggleTheme={toggleTheme}
-        />
+  return (
+    <div className="flex flex-col fixed inset-0 bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      {/* Window title bar - Windows style */}
+      <div className="flex-shrink-0 h-7 bg-blue-700 dark:bg-blue-900 flex items-center cursor-default select-none text-white px-2 text-xs font-medium">
+        <span>Developer Workspace</span>
         
-        {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 focus:outline-none">
-          <div className="h-full py-2 px-2 sm:px-3 lg:px-4">
+        {/* Window controls */}
+        <div className="ml-auto flex">
+          <button className="w-6 h-6 flex items-center justify-center hover:bg-blue-600 dark:hover:bg-blue-800">
+            <svg className="h-3 w-3" viewBox="0 0 12 1" fill="currentColor">
+              <rect width="12" height="1" />
+            </svg>
+          </button>
+          
+          <button 
+            className="w-6 h-6 flex items-center justify-center hover:bg-blue-600 dark:hover:bg-blue-800"
+            onClick={toggleMaximized}
+          >
+            {isMaximized ? (
+              <svg className="h-3 w-3" viewBox="0 0 10 10" fill="none" stroke="currentColor">
+                <rect x="0.5" y="0.5" width="9" height="9" strokeWidth="1" />
+                <rect x="3" y="3" width="9" height="9" strokeWidth="1" />
+              </svg>
+            ) : (
+              <svg className="h-3 w-3" viewBox="0 0 10 10" fill="none" stroke="currentColor">
+                <rect x="0.5" y="0.5" width="9" height="9" strokeWidth="1" />
+              </svg>
+            )}
+          </button>
+          
+          <button className="w-6 h-6 flex items-center justify-center hover:bg-red-600">
+            <svg className="h-3 w-3" viewBox="0 0 10 10" fill="none" stroke="currentColor">
+              <path d="M1 1L9 9M9 1L1 9" strokeWidth="1.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      
+      {/* App Toolbar */}
+      <Navbar 
+        sidebarOpen={sidebarOpen} 
+        setSidebarOpen={setSidebarOpen} 
+        darkMode={settings.theme === 'dark'}
+        toggleTheme={toggleTheme}
+      />
+      
+      {/* Main content area with sidebar */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+        
+        {/* Backdrop for mobile sidebar */}
+        {sidebarOpen && isMobile && (
+          <div 
+            className="fixed inset-0 z-10 bg-gray-900 bg-opacity-50 transition-opacity lg:hidden"
+            onClick={handleBackdropClick}
+            aria-hidden="true"
+          />
+        )}
+        
+        {/* Main Content */}
+        <main className="flex-1 overflow-hidden flex flex-col">
+          <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 focus:outline-none p-2 sm:p-3 lg:p-4">
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/projects" element={<Projects />} />
@@ -83,23 +126,31 @@ const App = () => {
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </div>
+          
+          {/* Status bar - Windows style */}
+          <div className="flex-shrink-0 h-5 bg-gray-200 dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 flex items-center px-2 text-xs text-gray-600 dark:text-gray-400">
+            <div className="flex items-center">
+              <span className="h-2 w-2 rounded-full bg-green-500 mr-1.5"></span>
+              <span>Connected</span>
+            </div>
+            <div className="ml-3 flex items-center">
+              <span className="h-2 w-2 rounded-full bg-blue-500 mr-1.5"></span>
+              <span>Network: Online</span>
+            </div>
+            <div className="ml-auto flex space-x-4">
+              <span>Projects: {projects?.length || 0}</span>
+              <span>Tasks: {tasks?.length || 0}</span>
+              <span>{new Date().toLocaleTimeString()}</span>
+            </div>
+          </div>
         </main>
-
-        {/* Status bar at bottom - desktop OS-like feature */}
-        <footer className="flex-shrink-0 h-5 bg-gray-100 dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex items-center px-3 text-xs text-gray-500 dark:text-gray-400">
-          <div className="flex items-center">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>
-            <span>Connected</span>
-          </div>
-          <div className="ml-auto flex space-x-3">
-            <span>Projects: 6</span>
-            <span>Tasks: 24</span>
-            <span>Version 1.0.2</span>
-          </div>
-        </footer>
       </div>
     </div>
   );
 };
+
+// Mock data for status bar
+const projects = [1, 2, 3, 4, 5, 6];
+const tasks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24];
 
 export default App; 

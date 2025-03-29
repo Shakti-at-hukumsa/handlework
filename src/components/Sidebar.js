@@ -1,134 +1,88 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
-import { 
-  HomeIcon, 
-  FolderIcon, 
-  CalendarIcon, 
-  CheckBadgeIcon, 
-  CreditCardIcon, 
-  CogIcon,
-  XMarkIcon,
-  ArrowUpTrayIcon,
+import { Link, useLocation } from 'react-router-dom';
+import {
+  HomeIcon,
+  FolderIcon,
+  ClipboardDocumentListIcon,
+  CalendarIcon,
+  CreditCardIcon,
+  Cog6ToothIcon,
+  ChevronRightIcon
 } from '@heroicons/react/24/outline';
-import { useAppSettings } from '../contexts/AppContext';
-
-// Navigation items
-const navigation = [
-  { name: 'Dashboard', href: '/', icon: HomeIcon },
-  { name: 'Projects', href: '/projects', icon: FolderIcon },
-  { name: 'Schedule', href: '/schedule', icon: CalendarIcon },
-  { name: 'Tasks', href: '/tasks', icon: CheckBadgeIcon },
-  { name: 'Payments', href: '/payments', icon: CreditCardIcon },
-  { name: 'Settings', href: '/settings', icon: CogIcon },
-];
 
 const Sidebar = ({ open, setOpen }) => {
-  const { settings } = useAppSettings();
+  const location = useLocation();
   
+  // Navigation items
+  const navigation = [
+    { name: 'Dashboard', href: '/', icon: HomeIcon },
+    { name: 'Projects', href: '/projects', icon: FolderIcon },
+    { name: 'Tasks', href: '/tasks', icon: ClipboardDocumentListIcon },
+    { name: 'Schedule', href: '/schedule', icon: CalendarIcon },
+    { name: 'Payments', href: '/payments', icon: CreditCardIcon },
+    { name: 'Settings', href: '/settings', icon: Cog6ToothIcon },
+  ];
+
   return (
-    <>
-      <div 
-        className={`fixed inset-y-0 left-0 z-30 w-52 bg-gray-100 dark:bg-gray-800 transition-transform duration-300 ease-in-out transform lg:translate-x-0 lg:static lg:inset-auto border-r border-gray-200 dark:border-gray-700 ${open ? 'translate-x-0 shadow-lg' : '-translate-x-full'}`}
-      >
-        <div className="flex flex-col h-full">
-          {/* Sidebar header */}
-          <div className="flex items-center justify-between h-8 px-3 py-1.5 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
-            <div className="flex items-center space-x-2">
-              <svg className="icon-app-sm text-primary-600" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="currentColor" />
-                <path d="M2 17L12 22L22 17M2 12L12 17L22 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <div className="text-app-xs font-semibold text-gray-800 dark:text-white">DevSpace</div>
-            </div>
-            <button
-              type="button"
-              className="lg:hidden p-0.5 rounded text-gray-500 hover:text-gray-600 hover:bg-gray-300 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-600"
-              onClick={() => setOpen(false)}
-              aria-label="Close sidebar"
+    <div
+      className={`${
+        open ? 'translate-x-0' : '-translate-x-full'
+      } fixed inset-y-0 left-0 z-20 w-52 flex-shrink-0 overflow-hidden transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 bg-gray-100 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700`}
+    >
+      {/* Sidebar header */}
+      <div className="h-8 flex items-center px-3 bg-blue-600 dark:bg-blue-800 text-white">
+        <span className="text-sm font-medium">Developer Workspace</span>
+        
+        {/* Close sidebar button (mobile only) */}
+        <button
+          className="ml-auto lg:hidden rounded-md focus:outline-none focus:ring-1 focus:ring-white"
+          onClick={() => setOpen(false)}
+        >
+          <ChevronRightIcon className="h-4 w-4" />
+        </button>
+      </div>
+      
+      {/* Navigation */}
+      <nav className="flex-1 overflow-y-auto p-1 space-y-1 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700">
+        {navigation.map((item) => {
+          const isActive = location.pathname === item.href;
+          
+          return (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={`group flex items-center px-2 py-1.5 text-sm font-medium rounded-sm ${
+                isActive
+                  ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300'
+                  : 'text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'
+              }`}
+              onClick={() => window.innerWidth < 1024 && setOpen(false)}
             >
-              <XMarkIcon className="icon-app-sm" aria-hidden="true" />
-            </button>
+              <item.icon
+                className={`mr-2 flex-shrink-0 h-4 w-4 ${
+                  isActive
+                    ? 'text-blue-700 dark:text-blue-300'
+                    : 'text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300'
+                }`}
+                aria-hidden="true"
+              />
+              {item.name}
+            </Link>
+          );
+        })}
+      </nav>
+      
+      {/* Sidebar footer */}
+      <div className="flex-shrink-0 py-1.5 px-2 border-t border-gray-200 dark:border-gray-700">
+        <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+          <div className="flex items-center">
+            <span className="h-2 w-2 rounded-full bg-green-500 mr-1.5"></span>
+            <span>Connected</span>
           </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 px-1 py-1 space-y-0.5 overflow-y-auto scrollbar-none">
-            {navigation.map((item) => (
-              <NavLink
-                key={item.name}
-                to={item.href}
-                className={({ isActive }) => 
-                  `group flex items-center px-2 py-1 text-app-xs font-normal rounded ${
-                    isActive 
-                      ? 'bg-primary-50 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400' 
-                      : 'text-gray-700 hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700'
-                  }`
-                }
-              >
-                <item.icon 
-                  className="mr-1.5 flex-shrink-0 icon-app-sm text-gray-500 group-hover:text-gray-600 dark:text-gray-400"
-                  aria-hidden="true" 
-                />
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
-
-          {/* Divider with title */}
-          <div className="px-2 py-1">
-            <div className="flex items-center">
-              <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
-              <span className="mx-2 text-app-xs font-medium text-gray-500 dark:text-gray-400">Recent Projects</span>
-              <div className="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
-            </div>
-          </div>
-
-          {/* Recent projects list */}
-          <div className="px-2 py-1">
-            <ul className="space-y-0.5">
-              {['Marketing Website', 'Mobile App', 'Dashboard Redesign'].map((project, index) => (
-                <li key={index}>
-                  <a href="#" className="flex items-center px-2 py-1 text-app-xs rounded text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">
-                    <div className={`w-1.5 h-1.5 rounded-full mr-1.5 ${index === 0 ? 'bg-green-500' : index === 1 ? 'bg-yellow-500' : 'bg-blue-500'}`}></div>
-                    {project}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* User profile and quick actions */}
-          <div className="border-t border-gray-200 dark:border-gray-700 px-2 py-1.5 mt-auto">
-            <div className="flex items-center justify-between mb-1.5">
-              <div className="flex items-center">
-                <img 
-                  className="h-4 w-4 rounded-full border border-gray-200 dark:border-gray-700" 
-                  src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" 
-                  alt="User profile"
-                />
-                <div className="ml-1.5">
-                  <p className="text-app-xs font-medium text-gray-800 dark:text-white">Sarah Johnson</p>
-                  <p className="text-app-xs text-gray-500 dark:text-gray-400">Developer</p>
-                </div>
-              </div>
-              <button className="p-0.5 rounded bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300">
-                <ArrowUpTrayIcon className="icon-app-xs" aria-hidden="true" />
-              </button>
-            </div>
-            
-            {/* System status */}
-            <div className="rounded bg-gray-200 p-1.5 dark:bg-gray-700">
-              <div className="flex justify-between items-center mb-1">
-                <p className="text-app-xs font-medium text-gray-500 dark:text-gray-400">Storage</p>
-                <p className="text-app-xs font-medium text-gray-700 dark:text-gray-300">65%</p>
-              </div>
-              <div className="w-full bg-gray-300 dark:bg-gray-600 rounded-full h-0.5">
-                <div className="bg-primary-600 h-0.5 rounded-full" style={{ width: '65%' }}></div>
-              </div>
-            </div>
-          </div>
+          <div className="ml-auto">v1.0.2</div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
